@@ -4,18 +4,29 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements FragmentA.FragmentAListener, FragmentB.FragmentBListener {
+    private FragmentA fragmentA;
+    private FragmentB fragmentB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-/*      ExampleFragment fragment = new ExampleFragment();
-        Bundle args = new Bundle();     // Send arguments to Fragment.. But so much boilerplate and it will be confusing when lots of argument.
-        args.putString("argText","example Text");
-        args.putInt("argNumber",123);
-        fragment.setArguments(args);*/
-        ExampleFragment fragment = ExampleFragment.newInstance("exampletextspace", 12345);
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();    // We put the fragment instead of the rootlayout(frame layout)
+        fragmentA = new FragmentA();
+        fragmentB = new FragmentB();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container_a, fragmentA)
+                .replace(R.id.container_b, fragmentB)
+                .commit();
+    }
+
+    @Override
+    public void onInputASent(CharSequence input) {
+        fragmentB.updateEditText(input);
+    }
+
+    @Override
+    public void onInputBSent(CharSequence input) {
+        fragmentA.updateEditText(input);
     }
 }
